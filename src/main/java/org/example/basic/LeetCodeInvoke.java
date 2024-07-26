@@ -115,7 +115,9 @@ public class LeetCodeInvoke {
                 System.out.println(methodName + " : Answer Accept");
                 return true;
             } else {
-                System.out.println(methodName + " : Wrong Accept");
+                System.out.println("\n--------------------------------\n\t" +
+                        "\n* " + methodName + " : Wrong Accept!" + " *\n\t" +
+                        "\n--------------------------------\n\t");
                 return false;
             }
         } catch (JsonProcessingException e) {
