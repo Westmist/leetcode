@@ -1,0 +1,109 @@
+package org.example.basic;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class LeetCodeInvoke {
+
+    private static ObjectMapper MAPPER = new ObjectMapper();
+
+    public static void invoke(Class<?> aClass) {
+        Set<String> parentMethods = Arrays.stream(aClass.getSuperclass().getMethods())
+                .map(Method::getName)
+                .collect(Collectors.toSet());
+        invoke(aClass, allMethods -> {
+            // 过滤掉父类的方法
+            return Arrays.stream(allMethods)
+                    .filter(method -> !parentMethods.contains(method.getName()))
+                    .toArray(Method[]::new);
+        });
+    }
+
+    public static void invoke(Class<?> aClass, String methodName) {
+        invoke(aClass, allMethods -> Arrays.stream(allMethods)
+                .filter(method -> method.getName().equals(methodName))
+                .toArray(Method[]::new));
+    }
+
+    public static void invoke(Class<?> aClass, IMethodFilter filter) {
+        Object instance;
+        try {
+            Constructor<?> constructor = aClass.getDeclaredConstructor();
+            instance = constructor.newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+
+        Method[] methods = filter.filterMethod(aClass.getMethods());
+        for (Method method : methods) {
+            doInvoke(instance, method);
+        }
+    }
+
+    public static void doInvoke(Object instance, Method method) {
+        // 参数类型列表
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        // 实参数据列表
+        Param annotation = method.getAnnotation(Param.class);
+        String[] valueStr = annotation.value();
+
+        if (parameterTypes.length != valueStr.length) {
+            System.out.println(new IllegalAccessException().getMessage());
+        }
+
+        Object[] parameObj = new Object[parameterTypes.length];
+        for (int i = 0; i < parameterTypes.length; i++) {
+            try {
+                Object pObj = MAPPER.readValue(valueStr[i], parameterTypes[i]);
+                parameObj[i] = pObj;
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        Object ans;
+        try {
+            ans = method.invoke(instance, parameObj);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+
+        Result resultAno = method.getAnnotation(Result.class);
+        Class<?> returnType = method.getReturnType();
+
+        Object result;
+        try {
+            result = MAPPER.readValue(resultAno.value(), returnType);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        match(ans, result, method, parameObj);
+    }
+
+    private static boolean match(Object ans, Object result, Method method, Object[] parameObj) {
+        String methodName = method.getName();
+        try {
+            String ansStr = MAPPER.writeValueAsString(ans);
+            String resultStr = MAPPER.writeValueAsString(result);
+            if (ansStr.equals(resultStr)) {
+                System.out.println(methodName + " : Answer Accept");
+                return true;
+            } else {
+                System.out.println(methodName + " : Wrong Accept");
+                return false;
+            }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+}
