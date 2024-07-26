@@ -1,9 +1,10 @@
 package org.example.book.easy;
 
+import org.example.basic.MatchPattern;
 import org.example.basic.Param;
 import org.example.basic.Result;
 
-public class LeetCode {
+public class ArrayChapter {
 
     /**
      * 原地删除数组
@@ -56,5 +57,42 @@ public class LeetCode {
         }
         return ans;
     }
+
+
+    /**
+     * 旋转数组
+     *
+     * @param nums 原数组
+     * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2skh7/">...</a>}
+     */
+    @Param({"[1,2,3,4,5,6,7]", "3"})
+    @Result(value = "[5,6,7,1,2,3,4]", matchPattern = MatchPattern.PARAM_ONE)
+    public void rotate(int[] nums, int k) {
+        // 翻转次数是数组长度的整数倍时，数组保持不变
+        k = k % nums.length;
+        if (k <= 0) {
+            return;
+        }
+        // 多次翻转
+        // 1、翻转全部
+        dorotate(nums, 0, nums.length - 1);
+
+        // 2、翻转前k部分
+        dorotate(nums, 0, k - 1);
+
+        // 3、翻转后k部分
+        dorotate(nums, k, nums.length - 1);
+    }
+
+    private void dorotate(int[] nums, int h, int t) {
+        while (h < t) {
+            int tmp = nums[h];
+            nums[h] = nums[t];
+            nums[t] = tmp;
+            h++;
+            t--;
+        }
+    }
+
 
 }

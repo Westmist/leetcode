@@ -69,30 +69,48 @@ public class LeetCodeInvoke {
             }
         }
 
-        Object ans;
+
+        // 待验证的提交
+        Object commit;
+        // 执行结果
+        Object invokeR;
         try {
-            ans = method.invoke(instance, parameObj);
+            invokeR = method.invoke(instance, parameObj);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
 
         Result resultAno = method.getAnnotation(Result.class);
-        Class<?> returnType = method.getReturnType();
+        Class<?> ansType;
 
-        Object result;
+        switch (resultAno.matchPattern()) {
+            case MatchPattern.RESULT:
+                ansType = method.getReturnType();
+                commit = invokeR;
+                break;
+            case MatchPattern.PARAM_ONE:
+                ansType = parameterTypes[0];
+                commit = parameObj[0];
+                break;
+            default:
+                throw new RuntimeException();
+        }
+
+        // 预期的答案
+        Object ans;
         try {
-            result = MAPPER.readValue(resultAno.value(), returnType);
+            ans = MAPPER.readValue(resultAno.value(), ansType);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        match(ans, result, method, parameObj);
+        match(ans, commit, method);
     }
 
-    private static boolean match(Object ans, Object result, Method method, Object[] parameObj) {
+    private static boolean match(Object ans, Object commit, Method method) {
         String methodName = method.getName();
         try {
             String ansStr = MAPPER.writeValueAsString(ans);
-            String resultStr = MAPPER.writeValueAsString(result);
+            String resultStr = MAPPER.writeValueAsString(commit);
             if (ansStr.equals(resultStr)) {
                 System.out.println(methodName + " : Answer Accept");
                 return true;

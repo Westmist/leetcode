@@ -12,5 +12,7 @@ public @interface Result {
 
     String value();
 
+    int matchPattern() default MatchPattern.RESULT;
+
 }
 
