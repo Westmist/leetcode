@@ -1,5 +1,6 @@
 package org.example.book.easy;
 
+import org.example.basic.ConvertFactory;
 import org.example.basic.MatchPattern;
 import org.example.basic.Param;
 import org.example.basic.Answer;
@@ -156,7 +157,7 @@ public class ArrayChapter {
      * @param nums 原数组
      * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x21ib6/">...</a>}
      * 方法：三指针遍历
-     * 时间复杂度：nlog n + n => O(n)
+     * 时间复杂度：nlog n + n => O(nlog n)
      * 也可使用异或计算
      */
     @Param({"[4,1,4,1,2]"})
@@ -290,6 +291,89 @@ public class ArrayChapter {
             }
             right++;
         }
+    }
+
+    /**
+     * 两数之和
+     *
+     * @param nums   原数组
+     * @param target 原数组
+     * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2ba4i/">...</a>}
+     * 方法：排序预处理 + 相向双指针
+     * 时间复杂度：O(nlog n)
+     */
+    @Param({"[2,7,11,15]", "9"})
+    @Answer(value = "[0,1]")
+    public int[] twoSum(int[] nums, int target) {
+        Arrays.sort(nums);
+
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            if (nums[left] + nums[right] == target) {
+                return new int[]{left, right};
+            }
+            if (nums[left] + nums[right] > target) {
+                right--;
+            } else {
+                left++;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * 有效的数独
+     *
+     * @param board 数独表的二维数组表示
+     * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2f9gg/">...</a>}
+     * 方法：位图
+     * 时间复杂度：O(n^2)
+     */
+    @Param(value = {"[['5','3','.','.','7','.','.','.','.']," +
+            "['6','.','.','1','9','5','.','.','.']," +
+            "['.','9','8','.','.','.','.','6','.']," +
+            "['8','.','.','.','6','.','.','.','3']," +
+            "['4','.','.','8','.','3','.','.','1']," +
+            "['7','.','.','.','2','.','.','.','6']," +
+            "['.','6','.','.','.','.','2','8','.']," +
+            "['.','.','.','4','1','9','.','.','5']," +
+            "['.','.','.','.','8','.','.','7','9']]"}, convert = {ConvertFactory.DoubleCharArrayConvert.class})
+    @Answer(value = "true")
+    public boolean isValidSudoku(char[][] board) {
+        // 1、构建3个位图
+        int[] row = new int[board.length];
+        int[] col = new int[board[0].length];
+        int[] grid = new int[board.length * board[0].length / 9];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] == '.') {
+                    continue;
+                }
+                // 2、字符串转数字
+                int cInt = Integer.parseInt(String.valueOf(board[i][j]));
+                // 3、维护位图用于判断重复
+                // 行
+                if ((row[i] & (1 << cInt)) > 0) {
+                    return false;
+                }
+                row[i] |= 1 << cInt;
+
+                // 列
+                if ((col[j] & (1 << cInt)) > 0) {
+                    return false;
+                }
+                col[j] |= 1 << cInt;
+
+                // 九宫格索引  x * (col.length) + y
+                int index = (int) ((Math.ceil((i + 1) / 3d) - 1) * (board[0].length / 3) + Math.ceil((j + 1) / 3d) - 1);
+                if ((grid[index] & (1 << cInt)) > 0) {
+                    return false;
+                }
+                grid[index] |= 1 << cInt;
+            }
+        }
+        return true;
     }
 
 

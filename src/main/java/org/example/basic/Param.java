@@ -11,4 +11,6 @@ public @interface Param {
 
     String[] value() default {};
 
+    Class[] convert() default {};
+
 }

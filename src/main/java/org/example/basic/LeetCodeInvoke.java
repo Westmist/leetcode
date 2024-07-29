@@ -60,7 +60,13 @@ public class LeetCodeInvoke {
         }
 
         Object[] parameObj = new Object[parameterTypes.length];
+        Class[] convert = annotation.convert();
         for (int i = 0; i < parameterTypes.length; i++) {
+            if (convert.length > i && ConvertFactory.COVERTS.containsKey(convert[i])) {
+                IConvert<?> iConvert = ConvertFactory.COVERTS.get(convert[i]);
+                parameObj[i] = iConvert.convert(valueStr[i]);
+                continue;
+            }
             try {
                 Object pObj = MAPPER.readValue(valueStr[i], parameterTypes[i]);
                 parameObj[i] = pObj;
