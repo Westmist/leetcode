@@ -263,4 +263,34 @@ public class ArrayChapter {
     }
 
 
+    /**
+     * 移动零
+     *
+     * @param nums 原数组
+     * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2ba4i/">...</a>}
+     * 方法：双指针
+     * 时间复杂度：O(n)
+     */
+    @Param({"[0,1,0,3,12]"})
+    @Answer(value = "[1,3,12,0,0]", matchPattern = MatchPattern.PARAM_ONE)
+    public void moveZeroes(int[] nums) {
+        if (nums.length <= 1) {
+            return;
+        }
+        for (int left = 0, right = 1; right < nums.length; ) {
+            if (nums[left] != 0) {
+                left++;
+            }
+            if (nums[left] == 0 && nums[right] != 0) {
+                // swap
+                int tmp = nums[left];
+                nums[left] = nums[right];
+                nums[right] = tmp;
+                left++;
+            }
+            right++;
+        }
+    }
+
+
 }
