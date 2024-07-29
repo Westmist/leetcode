@@ -2,7 +2,11 @@ package org.example.book.easy;
 
 import org.example.basic.MatchPattern;
 import org.example.basic.Param;
-import org.example.basic.Result;
+import org.example.basic.Answer;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ArrayChapter {
 
@@ -16,7 +20,7 @@ public class ArrayChapter {
      * 时间复杂度：O(n)
      */
     @Param("[0,0,1,1,1,2,2,3,3,4]")
-    @Result("5")
+    @Answer("5")
     public int removeDuplicates(int[] nums) {
         int count = 0;
         for (int right = 1, left = 0; right < nums.length; ) {
@@ -31,6 +35,7 @@ public class ArrayChapter {
         return count + 1;
     }
 
+
     /**
      * 买股票的最佳时机
      *
@@ -41,7 +46,7 @@ public class ArrayChapter {
      * 时间复杂度：O(n)
      */
     @Param("[7,1,5,3,6,4]")
-    @Result("7")
+    @Answer("7")
     public int maxProfit(int[] prices) {
         int ans = 0;
         int f = -1;
@@ -70,7 +75,7 @@ public class ArrayChapter {
      * 时间复杂度：O(n)
      */
     @Param({"[1,2,3,4,5,6,7]", "3"})
-    @Result(value = "[5,6,7,1,2,3,4]", matchPattern = MatchPattern.PARAM_ONE)
+    @Answer(value = "[5,6,7,1,2,3,4]", matchPattern = MatchPattern.PARAM_ONE)
     public void rotate(int[] nums, int k) {
         // 翻转次数是数组长度的整数倍时，数组保持不变
         k = k % nums.length;
@@ -97,6 +102,7 @@ public class ArrayChapter {
         }
     }
 
+
     /**
      * 存在重复元素
      *
@@ -107,7 +113,7 @@ public class ArrayChapter {
      */
     @Deprecated  // 超出内存限制
     @Param({"[1,2,3,1]"})
-    @Result(value = "true")
+    @Answer(value = "true")
     public boolean containsDuplicate(int[] nums) {
         if (nums.length == 0) {
             return false;
@@ -141,6 +147,119 @@ public class ArrayChapter {
         }
 
         return false;
+    }
+
+
+    /**
+     * 只出现一次的数字
+     *
+     * @param nums 原数组
+     * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x21ib6/">...</a>}
+     * 方法：三指针遍历
+     * 时间复杂度：nlog n + n => O(n)
+     * 也可使用异或计算
+     */
+    @Param({"[4,1,4,1,2]"})
+    @Answer(value = "2")
+    public int singleNumber(int[] nums) {
+        // 1、排序
+        Arrays.sort(nums);
+        // 2、边界判断
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        if (nums[0] != nums[1]) {
+            return nums[0];
+        }
+        if (nums[nums.length - 1] != nums[nums.length - 2]) {
+            return nums[nums.length - 1];
+        }
+        // 3、遍历对比前后
+        for (int i = 1; i < nums.length - 1; i++) {
+            if (nums[i] != nums[i - 1] && nums[i] != nums[i + 1]) {
+                return nums[i];
+            }
+        }
+        return -1;
+    }
+
+
+    /**
+     * 两个数组的交集 II
+     *
+     * @param nums1 数组1
+     * @param nums2 数组2
+     * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2y0c2/">...</a>}
+     * 方法：相对双指针
+     * 时间复杂度：2nlog n + 2n => O(n)
+     */
+    @Param({"[1,2,2,1]", "[2,2]"})
+    @Answer(value = "[2,2]")
+    public int[] intersect(int[] nums1, int[] nums2) {
+        // 1、排序
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+
+        // 2、双指针相对移动，查找相同的元素
+        List<Integer> ans = new ArrayList<>();
+        for (int i = 0, j = 0; i < nums1.length && j < nums2.length; ) {
+            if (nums1[i] > nums2[j]) {
+                j++;
+                continue;
+            }
+            if (nums2[j] > nums1[i]) {
+                i++;
+                continue;
+            }
+            // 两个指针指向的值相等
+            ans.add(nums1[i]);
+            i++;
+            j++;
+        }
+
+        // 3、转成数组
+        int[] ansArr = new int[ans.size()];
+        for (int i = 0; i < ans.size(); i++) {
+            ansArr[i] = ans.get(i);
+        }
+        return ansArr;
+    }
+
+    /**
+     * 加一
+     *
+     * @param digits 数字数组
+     * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2cv1c/">...</a>}
+     * 方法：数学
+     * 时间复杂度：O(n)
+     */
+    @Param({"[9,9]"})
+    @Answer(value = "[1,0,0]")
+    public int[] plusOne(int[] digits) {
+        // addend(加数) 可以为1~9
+        int addend = 1;
+        // 进位
+        int carry = 0;
+        for (int i = digits.length - 1; i >= 0; i--) {
+            int sum = digits[i] + addend + carry;
+            addend = 0;
+            // 需要进位
+            if (sum >= 10) {
+                carry = 1;
+                digits[i] = sum % 10;
+            } else {
+                carry = 0;
+                digits[i] = sum;
+            }
+        }
+        if (carry == 0) {
+            return digits;
+        }
+
+        int[] ans = new int[digits.length + 1];
+        ans[0] = carry;
+        System.arraycopy(digits, 0, ans, 1, digits.length);
+        return ans;
     }
 
 

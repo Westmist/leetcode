@@ -80,10 +80,10 @@ public class LeetCodeInvoke {
             throw new RuntimeException(e);
         }
 
-        Result resultAno = method.getAnnotation(Result.class);
+        Answer answerAno = method.getAnnotation(Answer.class);
         Class<?> ansType;
 
-        switch (resultAno.matchPattern()) {
+        switch (answerAno.matchPattern()) {
             case MatchPattern.RESULT:
                 ansType = method.getReturnType();
                 commit = invokeR;
@@ -99,7 +99,7 @@ public class LeetCodeInvoke {
         // 预期的答案
         Object ans;
         try {
-            ans = MAPPER.readValue(resultAno.value(), ansType);
+            ans = MAPPER.readValue(answerAno.value(), ansType);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
