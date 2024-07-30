@@ -36,4 +36,41 @@ public class StringChapter {
             right--;
         }
     }
+
+
+    /**
+     * 整数反转
+     *
+     * @param x 原值
+     * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnx13t/'>...</a>}
+     * 方法：相向双指针
+     * 时间复杂度：O(n)
+     */
+    @Param("-123")
+    @Answer("-321")
+    public int reverse(int x) {
+        char[] src = String.valueOf(x).toCharArray();
+        int left = 0, right = src.length - 1;
+        while (left < right) {
+            if (src[left] == '-') {
+                left++;
+                continue;
+            }
+            char temp = src[left];
+            src[left] = src[right];
+            src[right] = temp;
+            left++;
+            right--;
+        }
+        StringBuilder builder = new StringBuilder();
+        for (char c : src) {
+            builder.append(c);
+        }
+        long l = Long.parseLong(builder.toString());
+        if (l > Integer.MAX_VALUE || l < Integer.MIN_VALUE) {
+            return 0;
+        }
+        return (int) l;
+    }
+
 }

@@ -107,7 +107,7 @@ public class LeetCodeInvoke {
         // 预期的答案
         Object ans;
         try {
-            if (resultConvert != Void.TYPE) {
+            if (resultConvert != Void.class && ConvertFactory.COVERTS.containsKey(resultConvert)) {
                 IConvert<?> iConvert = ConvertFactory.COVERTS.get(resultConvert);
                 ans = iConvert.convert(answerAno.value());
             } else {
