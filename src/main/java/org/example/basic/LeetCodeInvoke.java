@@ -67,6 +67,10 @@ public class LeetCodeInvoke {
                 parameObj[i] = iConvert.convert(valueStr[i]);
                 continue;
             }
+            if (parameterTypes[i] == String.class) {
+                parameObj[i] = valueStr[i];
+                continue;
+            }
             try {
                 Object pObj = MAPPER.readValue(valueStr[i], parameterTypes[i]);
                 parameObj[i] = pObj;
