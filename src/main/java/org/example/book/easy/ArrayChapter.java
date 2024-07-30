@@ -377,4 +377,40 @@ public class ArrayChapter {
     }
 
 
+    /**
+     * 旋转图像
+     *
+     * @param matrix 二维数组
+     * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnhhkv/">...</a>}
+     * 方法：数组规律
+     * 时间复杂度：O(n)
+     */
+    @Param({"[[1,2,3],[4,5,6],[7,8,9]]"})
+    @Answer(value = "[[7,4,1],[8,5,2],[9,6,3]]")
+    public void rotate(int[][] matrix) {
+        // 1、上下交换
+        int half = matrix.length / 2;
+        for (int i = 0; i < half; i++) {
+            int[] row = matrix[i];
+            for (int j = 0; j < row.length; j++) {
+                int temp = row[j];
+                row[j] = matrix[matrix.length - 1 - i][j];
+                matrix[matrix.length - 1 - i][j] = temp;
+            }
+        }
+        // 2、对角线交换 （捺）
+        for (int i = 0; i < matrix.length; i++) {
+            int[] row = matrix[i];
+            for (int j = 0; j < row.length; j++) {
+                if (i > j) {
+                    continue;
+                }
+                int temp = row[j];
+                row[j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+    }
+
+
 }
