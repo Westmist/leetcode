@@ -102,10 +102,17 @@ public class LeetCodeInvoke {
                 throw new RuntimeException();
         }
 
+
+        Class<?> resultConvert = answerAno.convert();
         // 预期的答案
         Object ans;
         try {
-            ans = MAPPER.readValue(answerAno.value(), ansType);
+            if (resultConvert != Void.TYPE) {
+                IConvert<?> iConvert = ConvertFactory.COVERTS.get(resultConvert);
+                ans = iConvert.convert(answerAno.value());
+            } else {
+                ans = MAPPER.readValue(answerAno.value(), ansType);
+            }
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

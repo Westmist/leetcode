@@ -14,5 +14,7 @@ public @interface Answer {
 
     int matchPattern() default MatchPattern.RESULT;
 
+    Class<?> convert() default Void.class;
+
 }
 

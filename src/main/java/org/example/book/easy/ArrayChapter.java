@@ -9,6 +9,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 力扣书籍 - 初级算法
+ * 数组章节
+ *
+ * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2i30g/">...</a>}
+ */
 public class ArrayChapter {
 
     /**
