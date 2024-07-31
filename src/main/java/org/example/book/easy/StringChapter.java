@@ -109,6 +109,7 @@ public class StringChapter {
         return -1;
     }
 
+
     /**
      * 有效的字母异位词
      *
@@ -178,6 +179,7 @@ public class StringChapter {
         }
         return true;
     }
+
 
     /**
      * 字符串转换整数 (atoi)
@@ -277,6 +279,7 @@ public class StringChapter {
         }
         return -1;
     }
+
 
     /**
      * 外观数列
