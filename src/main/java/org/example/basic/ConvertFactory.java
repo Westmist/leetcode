@@ -11,6 +11,7 @@ public class ConvertFactory {
     static {
         COVERTS.put(DoubleCharArrayConvert.class, new DoubleCharArrayConvert());
         COVERTS.put(CharArrayConvert.class, new CharArrayConvert());
+        COVERTS.put(StringArrayConvert.class, new StringArrayConvert());
     }
 
     /**
@@ -70,6 +71,21 @@ public class ConvertFactory {
             }
 
             return charArray;
+        }
+    }
+
+    /**
+     * 转一维 string 数组
+     */
+    public static class StringArrayConvert implements IConvert<String[]> {
+        @Override
+        public String[] convert(String src) {
+            // 去掉方括号和单引号
+            src = src.replace("[", "")
+                    .replace("]", "")
+                    .replace("'", "");
+            // 根据逗号分割字符串
+            return src.split(",");
         }
     }
 

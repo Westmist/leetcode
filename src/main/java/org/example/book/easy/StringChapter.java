@@ -190,7 +190,6 @@ public class StringChapter {
     @Param({" -042"})
     @Answer("-42")
     public int myAtoi(String s) {
-        // TODO 考虑状态机
         StringBuilder builder = new StringBuilder();
         // 0: 初始阶段，1：已除去空格， 2: 已加完符号， 3：已处理完前置0
         int state = 0;
@@ -247,5 +246,119 @@ public class StringChapter {
         long l = Long.parseLong(builder.toString());
         return l > Integer.MAX_VALUE ? Integer.MAX_VALUE : l < Integer.MIN_VALUE ? Integer.MIN_VALUE : (int) l;
     }
+
+
+    /**
+     * 实现 strStr()
+     *
+     * @param haystack 字符串
+     * @param needle   子串
+     * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnr003/'>...</a>}
+     * 方法：字串对比
+     * 时间复杂度：O(n^2)
+     */
+    @Param({"leetcode", "leet"})
+    @Answer("0")
+    public int strStr(String haystack, String needle) {
+        for (int i = 0; i < haystack.length(); i++) {
+            char tar = haystack.charAt(i);
+            if (tar == needle.charAt(0)) {
+                boolean match = true;
+                for (int j = 1; j < needle.length(); j++) {
+                    if (i + j >= haystack.length() || needle.charAt(j) != haystack.charAt(i + j)) {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 外观数列
+     *
+     * @param n 长度
+     * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnpvdm/'>...</a>}
+     * 方法：双指针
+     * 时间复杂度：O(n^2)
+     */
+    @Param({"4"})
+    @Answer("1211")
+    public String countAndSay(int n) {
+        String ans = "1";
+        for (int i = 1; i < n; i++) {
+            ans = doCountAndSay(ans);
+        }
+        return ans;
+    }
+
+    private String doCountAndSay(String str) {
+        if (str.length() == 1) {
+            return "1" + str.charAt(0);
+        }
+        StringBuilder builder = new StringBuilder();
+        int count = 1;
+        for (int left = 0, right = 1; right <= str.length(); ) {
+            if (right >= str.length() || str.charAt(left) != str.charAt(right)) {
+                builder.append(count);
+                builder.append(str.charAt(left));
+                count = 1;
+                left = right;
+                right += 1;
+            } else {
+                right++;
+                count++;
+            }
+        }
+        return builder.toString();
+    }
+
+
+    /**
+     * 最长公共前缀
+     *
+     * @param strs 字符串数组
+     * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnmav1/'>...</a>}
+     * 方法：多指针同步遍历
+     * 时间复杂度：O(n)
+     */
+    @Param(value = {"['flower','flow','flight']"}, convert = ConvertFactory.StringArrayConvert.class)
+    @Answer("fl")
+    public String longestCommonPrefix(String[] strs) {
+        String f = strs[0];
+        int minLength = f.length();
+        for (String str : strs) {
+            minLength = Math.min(minLength, str.length());
+        }
+        if (minLength == 0) {
+            return "";
+        }
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < minLength; i++) {
+            if (i >= f.length()) {
+                break;
+            }
+            char c = f.charAt(i);
+            boolean match = true;
+            for (String str : strs) {
+                if (i >= str.length() || str.charAt(i) != c) {
+                    match = false;
+                    break;
+                }
+            }
+            if (!match) {
+                break;
+            }
+            builder.append(c);
+        }
+
+        return builder.toString();
+    }
+
 
 }

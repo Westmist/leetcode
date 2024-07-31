@@ -21,7 +21,8 @@ public class LeetCodeInvoke {
         invoke(aClass, allMethods -> {
             // 过滤掉父类的方法
             return Arrays.stream(allMethods)
-                    .filter(method -> !parentMethods.contains(method.getName()))
+                    .filter(method -> !parentMethods.contains(method.getName())
+                            && method.isAnnotationPresent(Param.class))
                     .toArray(Method[]::new);
         });
     }
@@ -114,6 +115,8 @@ public class LeetCodeInvoke {
             if (resultConvert != Void.class && ConvertFactory.COVERTS.containsKey(resultConvert)) {
                 IConvert<?> iConvert = ConvertFactory.COVERTS.get(resultConvert);
                 ans = iConvert.convert(answerAno.value());
+            } else if (ansType == String.class) {
+                ans = answerAno.value();
             } else {
                 ans = MAPPER.readValue(answerAno.value(), ansType);
             }
