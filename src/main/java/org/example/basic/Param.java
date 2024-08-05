@@ -9,8 +9,25 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 public @interface Param {
 
+    /**
+     * 原字符串
+     */
     String[] value() default {};
 
+    /**
+     * 转换类
+     */
     Class[] convert() default {};
+
+
+    /**
+     * 参数容器的泛型类
+     */
+    Class[] genericType() default {};
+
+    /**
+     * 取转换后数组的第 n 个元素
+     */
+    int[] cvtIndex() default {};
 
 }

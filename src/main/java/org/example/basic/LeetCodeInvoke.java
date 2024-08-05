@@ -2,11 +2,13 @@ package org.example.basic;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.comom.linkednode.TwoTuple;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,6 +52,17 @@ public class LeetCodeInvoke {
     }
 
     public static void doInvoke(Object instance, Method method) {
+        TwoTuple<Object[], Object[]> twoTuple = buildParamObj(method);
+        Object commit = buildCommit(instance, method, twoTuple);
+        Object ans = buildAns(method, twoTuple);
+        match(ans, commit, method);
+    }
+
+
+    /**
+     * 构建方法参数
+     */
+    private static TwoTuple<Object[], Object[]> buildParamObj(Method method) {
         // 参数类型列表
         Class<?>[] parameterTypes = method.getParameterTypes();
         // 实参数据列表
@@ -62,10 +75,27 @@ public class LeetCodeInvoke {
 
         Object[] parameObj = new Object[parameterTypes.length];
         Class[] convert = annotation.convert();
+        Object[] hideListParam = new Object[parameterTypes.length];
         for (int i = 0; i < parameterTypes.length; i++) {
             if (convert.length > i && ConvertFactory.COVERTS.containsKey(convert[i])) {
                 IConvert<?> iConvert = ConvertFactory.COVERTS.get(convert[i]);
-                parameObj[i] = iConvert.convert(valueStr[i]);
+                Class[] generic = annotation.genericType();
+                Object convertRet = iConvert.convert(valueStr[i], generic.length > i ? generic[i] : Void.class);
+                int[] ints = annotation.cvtIndex();
+                if (ints.length > i) {
+                    if (convertRet.getClass().isArray()) {
+                        Object[] array = (Object[]) convertRet;
+                        parameObj[i] = array[ints[i]];
+                        hideListParam[i] = array[0];
+                    }
+                    if (List.class.isAssignableFrom(convertRet.getClass())) {
+                        List list = (List) convertRet;
+                        parameObj[i] = list.get(ints[i]);
+                        hideListParam[i] = list.get(0);
+                    }
+                } else {
+                    parameObj[i] = convertRet;
+                }
                 continue;
             }
             if (parameterTypes[i] == String.class) {
@@ -79,42 +109,27 @@ public class LeetCodeInvoke {
                 throw new RuntimeException(e);
             }
         }
+        return new TwoTuple<>(parameObj, hideListParam);
+    }
 
-
-        // 待验证的提交
-        Object commit;
-        // 执行结果
-        Object invokeR;
-        try {
-            invokeR = method.invoke(instance, parameObj);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-
+    /**
+     * 构建正确答案
+     */
+    private static Object buildAns(Method method, TwoTuple<Object[], Object[]> params) {
         Answer answerAno = method.getAnnotation(Answer.class);
-        Class<?> ansType;
+        Class<?> ansType = method.getReturnType();
+        Class<?> resultConvert = answerAno.convert();
 
-        switch (answerAno.matchPattern()) {
-            case MatchPattern.RESULT:
-                ansType = method.getReturnType();
-                commit = invokeR;
-                break;
-            case MatchPattern.PARAM_ONE:
-                ansType = parameterTypes[0];
-                commit = parameObj[0];
-                break;
-            default:
-                throw new RuntimeException();
+        if (answerAno.matchPattern() == MatchPattern.PARAM_ONE) {
+            return params.getFirst()[0];
         }
 
-
-        Class<?> resultConvert = answerAno.convert();
         // 预期的答案
         Object ans;
         try {
             if (resultConvert != Void.class && ConvertFactory.COVERTS.containsKey(resultConvert)) {
                 IConvert<?> iConvert = ConvertFactory.COVERTS.get(resultConvert);
-                ans = iConvert.convert(answerAno.value());
+                ans = iConvert.convert(answerAno.value(), answerAno.genericType());
             } else if (ansType == String.class) {
                 ans = answerAno.value();
             } else {
@@ -123,8 +138,31 @@ public class LeetCodeInvoke {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        match(ans, commit, method);
+        return ans;
     }
+
+
+    /**
+     * 构建执行结果
+     */
+    private static Object buildCommit(Object instance, Method method, TwoTuple<Object[], Object[]> twoTuple) {
+        // 执行结果
+        Object invokeR;
+        try {
+            invokeR = method.invoke(instance, twoTuple.getFirst());
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+
+        Answer answerAno = method.getAnnotation(Answer.class);
+        return switch (answerAno.matchPattern()) {
+            case MatchPattern.RESULT -> invokeR;
+            case MatchPattern.PARAM_ONE -> twoTuple.getFirst()[0];
+            case MatchPattern.HIDE_PARAM_ONE -> twoTuple.getSecond()[0];
+            default -> throw new RuntimeException();
+        };
+    }
+
 
     private static boolean match(Object ans, Object commit, Method method) {
         String methodName = method.getName();

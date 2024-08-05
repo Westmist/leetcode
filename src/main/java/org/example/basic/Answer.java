@@ -16,5 +16,10 @@ public @interface Answer {
 
     Class<?> convert() default Void.class;
 
+    /**
+     * 参数容器的泛型类
+     */
+    Class<?> genericType() default Void.class;
+
 }
 

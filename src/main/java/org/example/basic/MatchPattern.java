@@ -17,4 +17,11 @@ public interface MatchPattern {
      */
     int PARAM_ONE = 2;
 
+
+    /**
+     * 隐藏的参数部分
+     */
+    int HIDE_PARAM_ONE = 3;
+
+
 }
