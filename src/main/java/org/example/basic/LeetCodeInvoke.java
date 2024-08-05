@@ -121,7 +121,7 @@ public class LeetCodeInvoke {
         Class<?> resultConvert = answerAno.convert();
 
         if (answerAno.matchPattern() == MatchPattern.PARAM_ONE) {
-            return params.getFirst()[0];
+            return params.first()[0];
         }
 
         // 预期的答案
@@ -149,7 +149,7 @@ public class LeetCodeInvoke {
         // 执行结果
         Object invokeR;
         try {
-            invokeR = method.invoke(instance, twoTuple.getFirst());
+            invokeR = method.invoke(instance, twoTuple.first());
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
@@ -157,8 +157,8 @@ public class LeetCodeInvoke {
         Answer answerAno = method.getAnnotation(Answer.class);
         return switch (answerAno.matchPattern()) {
             case MatchPattern.RESULT -> invokeR;
-            case MatchPattern.PARAM_ONE -> twoTuple.getFirst()[0];
-            case MatchPattern.HIDE_PARAM_ONE -> twoTuple.getSecond()[0];
+            case MatchPattern.PARAM_ONE -> twoTuple.first()[0];
+            case MatchPattern.HIDE_PARAM_ONE -> twoTuple.second()[0];
             default -> throw new RuntimeException();
         };
     }
