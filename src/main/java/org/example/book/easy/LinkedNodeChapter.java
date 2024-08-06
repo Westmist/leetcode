@@ -1,9 +1,15 @@
 package org.example.book.easy;
 
-import org.example.basic.*;
+import org.example.basic.Answer;
+import org.example.basic.MatchPattern;
+import org.example.basic.Param;
+import org.example.basic.Title;
 import org.example.basic.convert.ListNodeConvert;
 import org.example.basic.convert.ListNodeListConvert;
 import org.example.comom.linkednode.ListNode;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
  * 力扣书籍 - 初级算法
@@ -114,6 +120,7 @@ public class LinkedNodeChapter {
         return pre;
     }
 
+
     /**
      * @param list1 链表1
      * @param list2 链表2
@@ -166,6 +173,37 @@ public class LinkedNodeChapter {
         }
         return ans;
     }
+
+
+    /**
+     * @param head 链表
+     * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnv1oc/'>...</a>}
+     * 方法：栈对比
+     * 时间复杂度：O(n)
+     */
+    @Title("回文链表")
+    @Param(value = "[1,2,2,1]", convert = ListNodeConvert.class, genericType = Integer.class)
+    @Answer(value = "true")
+    public boolean isPalindrome(ListNode head) {
+        // 1、遍历一次创建栈
+        Deque<Integer> stack = new ArrayDeque<>();
+        ListNode p = head;
+        while (p != null) {
+            stack.push((int) p.val);
+            p = p.next;
+        }
+        // 2、弹栈对比
+        p = head;
+        while (p != null) {
+            Integer pop = stack.pop();
+            if (p.val != pop) {
+                return false;
+            }
+            p = p.next;
+        }
+        return true;
+    }
+
 
 
 }
