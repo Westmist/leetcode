@@ -1,9 +1,6 @@
 package org.example.book.easy;
 
-import org.example.basic.Answer;
-import org.example.basic.ConvertFactory;
-import org.example.basic.MatchPattern;
-import org.example.basic.Param;
+import org.example.basic.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,13 +14,12 @@ import java.util.Map;
 public class StringChapter {
 
     /**
-     * 反转字符串
-     *
      * @param s 原数组
      * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnhbqj/'>...</a>}
      * 方法：相向双指针
      * 时间复杂度：O(n)
      */
+    @Title("反转字符串")
     @Param(value = "['h','e','l','l','o']",
             convert = ConvertFactory.CharArrayConvert.class)
     @Answer(value = "['o','l','l','e','h']",
@@ -42,13 +38,12 @@ public class StringChapter {
 
 
     /**
-     * 整数反转
-     *
      * @param x 原值
      * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnx13t/'>...</a>}
      * 方法：相向双指针
      * 时间复杂度：O(n)
      */
+    @Title("整数反转")
     @Param("-123")
     @Answer("-321")
     public int reverse(int x) {
@@ -78,13 +73,12 @@ public class StringChapter {
 
 
     /**
-     * 字符串中的第一个唯一字符
-     *
      * @param s 原字符串
      * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/xn5z8r/'>...</a>}
      * 方法：自制哈希表
      * 时间复杂度：O(n)
      */
+    @Title("字符串中的第一个唯一字符")
     @Param("loveleetcode")
     @Answer("2")
     public int firstUniqChar(String s) {
@@ -119,6 +113,7 @@ public class StringChapter {
      * 方法：哈希表差值
      * 时间复杂度：O(n)
      */
+    @Title("有效的字母异位词")
     @Param({"anagram", "nagaram"})
     @Answer("true")
     public boolean isAnagram(String s, String t) {
@@ -153,6 +148,7 @@ public class StringChapter {
      * 方法：相向双指针
      * 时间复杂度：O(n)
      */
+    @Title("验证回文串")
     @Param({"A man, a plan, a canal: Panama"})
     @Answer("true")
     public boolean isPalindrome(String s) {
@@ -182,13 +178,12 @@ public class StringChapter {
 
 
     /**
-     * 字符串转换整数 (atoi)
-     *
      * @param s 字符串
      * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnoilh/'>...</a>}
      * 方法：流程逻辑
      * 时间复杂度：O(n)
      */
+    @Title("字符串转换整数 (atoi)")
     @Param({" -042"})
     @Answer("-42")
     public int myAtoi(String s) {
@@ -259,6 +254,7 @@ public class StringChapter {
      * 方法：字串对比
      * 时间复杂度：O(n^2)
      */
+    @Title("实现 strStr()")
     @Param({"leetcode", "leet"})
     @Answer("0")
     public int strStr(String haystack, String needle) {
@@ -282,13 +278,12 @@ public class StringChapter {
 
 
     /**
-     * 外观数列
-     *
      * @param n 长度
      * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnpvdm/'>...</a>}
      * 方法：双指针
      * 时间复杂度：O(n^2)
      */
+    @Title("外观数列")
     @Param({"4"})
     @Answer("1211")
     public String countAndSay(int n) {
@@ -322,13 +317,12 @@ public class StringChapter {
 
 
     /**
-     * 最长公共前缀
-     *
      * @param strs 字符串数组
      * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnmav1/'>...</a>}
      * 方法：多指针同步遍历
      * 时间复杂度：O(n)
      */
+    @Title("最长公共前缀")
     @Param(value = {"['flower','flow','flight']"}, convert = ConvertFactory.StringArrayConvert.class)
     @Answer("fl")
     public String longestCommonPrefix(String[] strs) {

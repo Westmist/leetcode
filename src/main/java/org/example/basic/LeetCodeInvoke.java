@@ -169,12 +169,14 @@ public class LeetCodeInvoke {
         try {
             String ansStr = MAPPER.writeValueAsString(ans);
             String resultStr = MAPPER.writeValueAsString(commit);
+
+            Title title = method.getAnnotation(Title.class);
             if (ansStr.equals(resultStr)) {
-                System.out.println(methodName + " : Answer Accept");
+                System.out.println(title.value() + " - " + methodName + " : Answer Accept");
                 return true;
             } else {
                 System.out.println("\n--------------------------------\n\t" +
-                        "\n* " + methodName + " : Wrong Accept!" + " *\n\t" +
+                        "\n* " + title.value() + " - " + methodName + " : Wrong Accept!" + " *\n\t" +
                         "\n--------------------------------\n\t");
                 return false;
             }

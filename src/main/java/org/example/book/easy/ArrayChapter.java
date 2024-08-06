@@ -1,9 +1,6 @@
 package org.example.book.easy;
 
-import org.example.basic.ConvertFactory;
-import org.example.basic.MatchPattern;
-import org.example.basic.Param;
-import org.example.basic.Answer;
+import org.example.basic.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,14 +15,13 @@ import java.util.List;
 public class ArrayChapter {
 
     /**
-     * 原地删除数组
-     *
      * @param nums 原数组 (递增)
      * @return 新数组长度
      * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2gy9m/">...</a>}
      * 方法：双指针，移位交换
      * 时间复杂度：O(n)
      */
+    @Title("原地删除数组")
     @Param("[0,0,1,1,1,2,2,3,3,4]")
     @Answer("5")
     public int removeDuplicates(int[] nums) {
@@ -44,14 +40,13 @@ public class ArrayChapter {
 
 
     /**
-     * 买股票的最佳时机
-     *
      * @param prices 股票价格
      * @return 最大利润
      * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2zsx1/">...</a>}
      * 方法：贪心策略
      * 时间复杂度：O(n)
      */
+    @Title("买股票的最佳时机")
     @Param("[7,1,5,3,6,4]")
     @Answer("7")
     public int maxProfit(int[] prices) {
@@ -74,13 +69,12 @@ public class ArrayChapter {
 
 
     /**
-     * 旋转数组
-     *
      * @param nums 原数组
      * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2skh7/">...</a>}
      * 方法：规律技巧，多次翻转
      * 时间复杂度：O(n)
      */
+    @Title("旋转数组")
     @Param({"[1,2,3,4,5,6,7]", "3"})
     @Answer(value = "[5,6,7,1,2,3,4]", matchPattern = MatchPattern.PARAM_ONE)
     public void rotate(int[] nums, int k) {
@@ -111,14 +105,13 @@ public class ArrayChapter {
 
 
     /**
-     * 存在重复元素
-     *
      * @param nums 原数组
      * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x248f5/">...</a>}
      * 方法：位运算
      * 时间复杂度：O(n)
      */
     @Deprecated  // 超出内存限制
+    @Title("存在重复元素")
     @Param({"[1,2,3,1]"})
     @Answer(value = "true")
     public boolean containsDuplicate(int[] nums) {
@@ -158,14 +151,13 @@ public class ArrayChapter {
 
 
     /**
-     * 只出现一次的数字
-     *
      * @param nums 原数组
      * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x21ib6/">...</a>}
      * 方法：三指针遍历
      * 时间复杂度：nlog n + n => O(nlog n)
      * 也可使用异或计算
      */
+    @Title("只出现一次的数字")
     @Param({"[4,1,4,1,2]"})
     @Answer(value = "2")
     public int singleNumber(int[] nums) {
@@ -192,14 +184,13 @@ public class ArrayChapter {
 
 
     /**
-     * 两个数组的交集 II
-     *
      * @param nums1 数组1
      * @param nums2 数组2
      * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2y0c2/">...</a>}
      * 方法：相对双指针
      * 时间复杂度：2nlog n + 2n => O(n)
      */
+    @Title("两个数组的交集 II")
     @Param({"[1,2,2,1]", "[2,2]"})
     @Answer(value = "[2,2]")
     public int[] intersect(int[] nums1, int[] nums2) {
@@ -234,13 +225,12 @@ public class ArrayChapter {
 
 
     /**
-     * 加一
-     *
      * @param digits 数字数组
      * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2cv1c/">...</a>}
      * 方法：数学
      * 时间复杂度：O(n)
      */
+    @Title("加一")
     @Param({"[9,9]"})
     @Answer(value = "[1,0,0]")
     public int[] plusOne(int[] digits) {
@@ -272,13 +262,12 @@ public class ArrayChapter {
 
 
     /**
-     * 移动零
-     *
      * @param nums 原数组
      * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2ba4i/">...</a>}
      * 方法：双指针
      * 时间复杂度：O(n)
      */
+    @Title("移动零")
     @Param({"[0,1,0,3,12]"})
     @Answer(value = "[1,3,12,0,0]", matchPattern = MatchPattern.PARAM_ONE)
     public void moveZeroes(int[] nums) {
@@ -302,14 +291,13 @@ public class ArrayChapter {
 
 
     /**
-     * 两数之和
-     *
      * @param nums   原数组
      * @param target 原数组
      * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2ba4i/">...</a>}
      * 方法：排序预处理 + 相向双指针
      * 时间复杂度：O(nlog n)
      */
+    @Title("两数之和")
     @Param({"[2,7,11,15]", "9"})
     @Answer(value = "[0,1]")
     public int[] twoSum(int[] nums, int target) {
@@ -331,13 +319,12 @@ public class ArrayChapter {
 
 
     /**
-     * 有效的数独
-     *
      * @param board 数独表的二维数组表示
      * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2f9gg/">...</a>}
      * 方法：位图
      * 时间复杂度：O(n^2)
      */
+    @Title("有效的数独")
     @Param(value = {"[['5','3','.','.','7','.','.','.','.']," +
             "['6','.','.','1','9','5','.','.','.']," +
             "['.','9','8','.','.','.','.','6','.']," +
@@ -386,13 +373,12 @@ public class ArrayChapter {
 
 
     /**
-     * 旋转图像
-     *
      * @param matrix 二维数组
      * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnhhkv/">...</a>}
      * 方法：数组规律
      * 时间复杂度：O(n)
      */
+    @Title("旋转图像")
     @Param({"[[1,2,3],[4,5,6],[7,8,9]]"})
     @Answer(value = "[[7,4,1],[8,5,2],[9,6,3]]")
     public void rotate(int[][] matrix) {
