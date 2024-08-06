@@ -2,9 +2,7 @@ package org.example;
 
 
 import org.example.basic.LeetCodeInvoke;
-import org.example.book.easy.ArrayChapter;
 import org.example.book.easy.LinkedNodeChapter;
-import org.example.book.easy.StringChapter;
 
 public class Main {
 

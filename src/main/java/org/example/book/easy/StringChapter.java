@@ -1,6 +1,11 @@
 package org.example.book.easy;
 
-import org.example.basic.*;
+import org.example.basic.Answer;
+import org.example.basic.MatchPattern;
+import org.example.basic.Param;
+import org.example.basic.Title;
+import org.example.basic.convert.CharArrayConvert;
+import org.example.basic.convert.StringArrayConvert;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,10 +26,10 @@ public class StringChapter {
      */
     @Title("反转字符串")
     @Param(value = "['h','e','l','l','o']",
-            convert = ConvertFactory.CharArrayConvert.class)
+            convert = CharArrayConvert.class)
     @Answer(value = "['o','l','l','e','h']",
             matchPattern = MatchPattern.PARAM_ONE,
-            convert = ConvertFactory.CharArrayConvert.class)
+            convert = CharArrayConvert.class)
     public void reverseString(char[] s) {
         int left = 0, right = s.length - 1;
         while (left < right) {
@@ -323,7 +328,7 @@ public class StringChapter {
      * 时间复杂度：O(n)
      */
     @Title("最长公共前缀")
-    @Param(value = {"['flower','flow','flight']"}, convert = ConvertFactory.StringArrayConvert.class)
+    @Param(value = {"['flower','flow','flight']"}, convert = StringArrayConvert.class)
     @Answer("fl")
     public String longestCommonPrefix(String[] strs) {
         String f = strs[0];

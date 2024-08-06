@@ -1,6 +1,10 @@
 package org.example.book.easy;
 
-import org.example.basic.*;
+import org.example.basic.Answer;
+import org.example.basic.MatchPattern;
+import org.example.basic.Param;
+import org.example.basic.Title;
+import org.example.basic.convert.DoubleCharArrayConvert;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -333,7 +337,7 @@ public class ArrayChapter {
             "['7','.','.','.','2','.','.','.','6']," +
             "['.','6','.','.','.','.','2','8','.']," +
             "['.','.','.','4','1','9','.','.','5']," +
-            "['.','.','.','.','8','.','.','7','9']]"}, convert = {ConvertFactory.DoubleCharArrayConvert.class})
+            "['.','.','.','.','8','.','.','7','9']]"}, convert = {DoubleCharArrayConvert.class})
     @Answer(value = "true")
     public boolean isValidSudoku(char[][] board) {
         // 1、构建3个位图

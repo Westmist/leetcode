@@ -2,6 +2,7 @@ package org.example.basic;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.basic.convert.IConvert;
 import org.example.comom.linkednode.TwoTuple;
 
 import java.lang.reflect.Constructor;

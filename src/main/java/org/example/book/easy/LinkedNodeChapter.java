@@ -1,6 +1,8 @@
 package org.example.book.easy;
 
 import org.example.basic.*;
+import org.example.basic.convert.ListNodeConvert;
+import org.example.basic.convert.ListNodeListConvert;
 import org.example.comom.linkednode.ListNode;
 
 /**
@@ -18,8 +20,8 @@ public class LinkedNodeChapter {
      * 时间复杂度：O(n)
      */
     @Title("删除链表中的节点")
-    @Param(value = "[4,5,1,9]", convert = ConvertFactory.ListNodeListConvert.class, genericType = {Integer.class}, cvtIndex = {1})
-    @Answer(value = "[4,1,9]", convert = ConvertFactory.ListNodeConvert.class, genericType = Integer.class, matchPattern = MatchPattern.HIDE_PARAM_ONE)
+    @Param(value = "[4,5,1,9]", convert = ListNodeListConvert.class, genericType = {Integer.class}, cvtIndex = {1})
+    @Answer(value = "[4,1,9]", convert = ListNodeConvert.class, genericType = Integer.class, matchPattern = MatchPattern.HIDE_PARAM_ONE)
     public void deleteNode(ListNode node) {
         ListNode cur = node;
         while (cur.next != null) {
@@ -41,8 +43,8 @@ public class LinkedNodeChapter {
      * 时间复杂度：O(n)
      */
     @Title("删除链表的倒数第N个节点")
-    @Param(value = {"[1,2,3,4,5]", "2"}, convert = ConvertFactory.ListNodeConvert.class, genericType = {Integer.class})
-    @Answer(value = "[1,2,3,5]", convert = ConvertFactory.ListNodeConvert.class, genericType = Integer.class)
+    @Param(value = {"[1,2,3,4,5]", "2"}, convert = ListNodeConvert.class, genericType = {Integer.class})
+    @Answer(value = "[1,2,3,5]", convert = ListNodeConvert.class, genericType = Integer.class)
     public ListNode removeNthFromEnd(ListNode head, int n) {
         // 两个指针间距为 n, back 节点即为待删除节点的上一个节点
         // 1、初始化双指针
@@ -76,8 +78,8 @@ public class LinkedNodeChapter {
      * 时间复杂度：O(n)
      */
     @Title("反转链表")
-    @Param(value = "[1,2]", convert = ConvertFactory.ListNodeConvert.class, genericType = {Integer.class})
-    @Answer(value = "[2,1]", convert = ConvertFactory.ListNodeConvert.class, genericType = Integer.class)
+    @Param(value = "[1,2]", convert = ListNodeConvert.class, genericType = {Integer.class})
+    @Answer(value = "[2,1]", convert = ListNodeConvert.class, genericType = Integer.class)
     public ListNode reverseList(ListNode head) {
         // 1、边界判断，只有一个节点时直接返回根节点
         if (head == null || head.next == null) {
@@ -110,6 +112,59 @@ public class LinkedNodeChapter {
             last.next = null;
         }
         return pre;
+    }
+
+    /**
+     * @param list1 链表1
+     * @param list2 链表2
+     * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnnbp2/'>...</a>}
+     * 方法：比较选择
+     * 时间复杂度：O(n)
+     */
+    @Title("合并两个有序链表")
+    @Param(value = {"[1,2,4]", "[1,3,4]"}, convert = {ListNodeConvert.class, ListNodeConvert.class},
+            genericType = {Integer.class, Integer.class})
+    @Answer(value = "[1,1,2,3,4,4]", convert = ListNodeConvert.class, genericType = Integer.class)
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        // 1、边界判断
+        if (list1 == null) {
+            return list2;
+        }
+        if (list2 == null) {
+            return list1;
+        }
+
+        // 2、答案根节点初始化
+        ListNode ans;
+        ListNode p1 = list1, p2 = list2;
+        if ((int) p1.val > (int) p2.val) {
+            ans = p2;
+            p2 = p2.next;
+        } else {
+            ans = p1;
+            p1 = p1.next;
+        }
+        // 3、比较结果拼接链表
+        ListNode ap = ans;
+        while (true) {
+            if (p1 == null) {
+                ap.next = p2;
+                break;
+            }
+            if (p2 == null) {
+                ap.next = p1;
+                break;
+            }
+            if ((int) p1.val > (int) p2.val) {
+                ap.next = p2;
+                p2 = p2.next;
+            } else {
+                ap.next = p1;
+                p1 = p1.next;
+            }
+            ap = ap.next;
+        }
+        return ans;
     }
 
 
