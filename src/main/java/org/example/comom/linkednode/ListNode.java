@@ -21,17 +21,17 @@ public class ListNode<T> {
         this.next = next;
     }
 
-    @Override
-    public String toString() {
-        // TODO 处理环形链表的情况
-        List<T> list = new ArrayList<>();
-        ListNode<T> p = this;
-        while (p != null) {
-            list.add(p.val);
-            p = p.next;
-        }
-        return list.toString();
-    }
+//    @Override
+//    public String toString() {
+//        // TODO 处理环形链表的情况
+//        List<T> list = new ArrayList<>();
+//        ListNode<T> p = this;
+//        while (p != null) {
+//            list.add(p.val);
+//            p = p.next;
+//        }
+//        return list.toString();
+//    }
 
     public static <T> ListNode<T> build(T... val) {
         if (val == null || val.length == 0) {
