@@ -54,6 +54,7 @@ public class LeetCodeInvoke {
         for (Method method : methods) {
             doInvoke(instance, method);
         }
+        log.info("\n");
     }
 
     public static void doInvoke(Object instance, Method method) {
