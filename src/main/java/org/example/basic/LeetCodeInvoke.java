@@ -2,14 +2,19 @@ package org.example.basic;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.basic.convert.IConvert;
-import org.example.comom.linkednode.TwoTuple;
+import org.example.basic.convert.ConvertUtil;
+import org.example.basic.convert.ano.Answer;
+import org.example.basic.convert.ano.Convert;
+import org.example.basic.convert.ano.Params;
+import org.example.basic.convert.ano.Title;
+import org.example.basic.convert.cons.MatchPattern;
+import org.example.basic.convert.inf.IConvertSection;
+import org.example.basic.convert.inf.IMethodFilter;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,7 +30,7 @@ public class LeetCodeInvoke {
             // 过滤掉父类的方法
             return Arrays.stream(allMethods)
                     .filter(method -> !parentMethods.contains(method.getName())
-                            && method.isAnnotationPresent(Param.class))
+                            && method.isAnnotationPresent(Answer.class))
                     .toArray(Method[]::new);
         });
     }
@@ -53,115 +58,62 @@ public class LeetCodeInvoke {
     }
 
     public static void doInvoke(Object instance, Method method) {
-        TwoTuple<Object[], Object[]> twoTuple = buildParamObj(method);
-        Object commit = buildCommit(instance, method, twoTuple);
-        Object ans = buildAns(method, twoTuple);
+        Object[] methodParams = buildParamObj(method);
+        Object commit = buildCommit(instance, method, methodParams);
+        Object ans = buildAns(method, methodParams);
         match(ans, commit, method);
     }
-
 
     /**
      * 构建方法参数
      */
-    private static TwoTuple<Object[], Object[]> buildParamObj(Method method) {
+    private static Object[] buildParamObj(Method method) {
         // 参数类型列表
         Class<?>[] parameterTypes = method.getParameterTypes();
         // 实参数据列表
-        Param annotation = method.getAnnotation(Param.class);
-        String[] valueStr = annotation.value();
+        Params params = method.getAnnotation(Params.class);
+        return ConvertUtil.parse(parameterTypes, params);
+    }
 
-        if (parameterTypes.length != valueStr.length) {
-            System.out.println(new IllegalAccessException().getMessage());
+    /**
+     * 构建执行结果
+     */
+    private static Object buildCommit(Object instance, Method method, Object[] params) {
+        // 执行结果
+        Object invokeR;
+        try {
+            invokeR = method.invoke(instance, params);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
         }
-
-        Object[] parameObj = new Object[parameterTypes.length];
-        Class[] convert = annotation.convert();
-        Object[] hideListParam = new Object[parameterTypes.length];
-        for (int i = 0; i < parameterTypes.length; i++) {
-            if (convert.length > i && ConvertFactory.COVERTS.containsKey(convert[i])) {
-                IConvert<?> iConvert = ConvertFactory.COVERTS.get(convert[i]);
-                Class[] generic = annotation.genericType();
-                Object convertRet = iConvert.convert(valueStr[i], generic.length > i ? generic[i] : Void.class);
-                int[] ints = annotation.cvtIndex();
-                if (ints.length > i) {
-                    if (convertRet.getClass().isArray()) {
-                        Object[] array = (Object[]) convertRet;
-                        parameObj[i] = array[ints[i]];
-                        hideListParam[i] = array[0];
-                    }
-                    if (List.class.isAssignableFrom(convertRet.getClass())) {
-                        List list = (List) convertRet;
-                        parameObj[i] = list.get(ints[i]);
-                        hideListParam[i] = list.get(0);
-                    }
-                } else {
-                    parameObj[i] = convertRet;
-                }
-                continue;
-            }
-            if (parameterTypes[i] == String.class) {
-                parameObj[i] = valueStr[i];
-                continue;
-            }
-            try {
-                Object pObj = MAPPER.readValue(valueStr[i], parameterTypes[i]);
-                parameObj[i] = pObj;
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return new TwoTuple<>(parameObj, hideListParam);
+        return invokeR;
     }
 
     /**
      * 构建正确答案
      */
-    private static Object buildAns(Method method, TwoTuple<Object[], Object[]> params) {
+    private static Object buildAns(Method method, Object[] params) {
         Answer answerAno = method.getAnnotation(Answer.class);
-        Class<?> ansType = method.getReturnType();
-        Class<?> resultConvert = answerAno.convert();
-
-        if (answerAno.matchPattern() == MatchPattern.PARAM_ONE) {
-            return params.first()[0];
-        }
-
-        // 预期的答案
-        Object ans;
-        try {
-            if (resultConvert != Void.class && ConvertFactory.COVERTS.containsKey(resultConvert)) {
-                IConvert<?> iConvert = ConvertFactory.COVERTS.get(resultConvert);
-                ans = iConvert.convert(answerAno.value(), answerAno.genericType());
-            } else if (ansType == String.class) {
-                ans = answerAno.value();
-            } else {
-                ans = MAPPER.readValue(answerAno.value(), ansType);
+        MatchPattern pattern = answerAno.pattern();
+        Class<? extends IConvertSection> clazz = answerAno.section();
+        if (pattern == MatchPattern.PARAM) {
+            IConvertSection section = null;
+            if (clazz.isInterface()) {
+                section = p -> p[0];
+                return section.paramsAns(params);
             }
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return ans;
-    }
-
-
-    /**
-     * 构建执行结果
-     */
-    private static Object buildCommit(Object instance, Method method, TwoTuple<Object[], Object[]> twoTuple) {
-        // 执行结果
-        Object invokeR;
-        try {
-            invokeR = method.invoke(instance, twoTuple.first());
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
+            try {
+                section = clazz.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            assert section != null;
+            return section.paramsAns(params);
         }
 
-        Answer answerAno = method.getAnnotation(Answer.class);
-        return switch (answerAno.matchPattern()) {
-            case MatchPattern.RESULT -> invokeR;
-            case MatchPattern.PARAM_ONE -> twoTuple.first()[0];
-            case MatchPattern.HIDE_PARAM_ONE -> twoTuple.second()[0];
-            default -> throw new RuntimeException();
-        };
+        Convert annoC = answerAno.c();
+        Class<?> ansType = method.getReturnType();
+        return ConvertUtil.parse(ansType, annoC);
     }
 
 

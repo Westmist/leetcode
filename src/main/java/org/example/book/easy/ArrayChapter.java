@@ -1,10 +1,12 @@
 package org.example.book.easy;
 
-import org.example.basic.Answer;
-import org.example.basic.MatchPattern;
-import org.example.basic.Param;
-import org.example.basic.Title;
-import org.example.basic.convert.DoubleCharArrayConvert;
+import org.example.basic.convert.ano.Answer;
+import org.example.basic.convert.ano.Convert;
+import org.example.basic.convert.ano.Params;
+import org.example.basic.convert.ano.Title;
+import org.example.basic.convert.cons.MatchPattern;
+import org.example.basic.convert.imp.ArrayConvert;
+import org.example.basic.convert.imp.TwoArrayConvert;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,8 +28,8 @@ public class ArrayChapter {
      * 时间复杂度：O(n)
      */
     @Title("原地删除数组")
-    @Param("[0,0,1,1,1,2,2,3,3,4]")
-    @Answer("5")
+    @Params(pc = {@Convert(value = "[0,0,1,1,1,2,2,3,3,4]", convert = ArrayConvert.class)})
+    @Answer(c = @Convert("5"))
     public int removeDuplicates(int[] nums) {
         int count = 0;
         for (int right = 1, left = 0; right < nums.length; ) {
@@ -51,8 +53,8 @@ public class ArrayChapter {
      * 时间复杂度：O(n)
      */
     @Title("买股票的最佳时机")
-    @Param("[7,1,5,3,6,4]")
-    @Answer("7")
+    @Params(pc = {@Convert(value = "[7,1,5,3,6,4]", convert = ArrayConvert.class)})
+    @Answer(c = @Convert("7"))
     public int maxProfit(int[] prices) {
         int ans = 0;
         int f = -1;
@@ -79,8 +81,8 @@ public class ArrayChapter {
      * 时间复杂度：O(n)
      */
     @Title("旋转数组")
-    @Param({"[1,2,3,4,5,6,7]", "3"})
-    @Answer(value = "[5,6,7,1,2,3,4]", matchPattern = MatchPattern.PARAM_ONE)
+    @Params(pc = {@Convert(value = "[1,2,3,4,5,6,7]", convert = ArrayConvert.class), @Convert("3")})
+    @Answer(c = @Convert(value = "[5,6,7,1,2,3,4]", convert = ArrayConvert.class), pattern = MatchPattern.PARAM)
     public void rotate(int[] nums, int k) {
         // 翻转次数是数组长度的整数倍时，数组保持不变
         k = k % nums.length;
@@ -116,8 +118,8 @@ public class ArrayChapter {
      */
     @Deprecated  // 超出内存限制
     @Title("存在重复元素")
-    @Param({"[1,2,3,1]"})
-    @Answer(value = "true")
+    @Params(pc = {@Convert(value = "[1,2,3,1]", convert = ArrayConvert.class)})
+    @Answer(c = @Convert("true"))
     public boolean containsDuplicate(int[] nums) {
         if (nums.length == 0) {
             return false;
@@ -162,8 +164,8 @@ public class ArrayChapter {
      * 也可使用异或计算
      */
     @Title("只出现一次的数字")
-    @Param({"[4,1,4,1,2]"})
-    @Answer(value = "2")
+    @Params(pc = {@Convert(value = "[4,1,4,1,2]", convert = ArrayConvert.class)})
+    @Answer(c = @Convert("2"))
     public int singleNumber(int[] nums) {
         // 1、排序
         Arrays.sort(nums);
@@ -195,8 +197,9 @@ public class ArrayChapter {
      * 时间复杂度：2nlog n + 2n => O(n)
      */
     @Title("两个数组的交集 II")
-    @Param({"[1,2,2,1]", "[2,2]"})
-    @Answer(value = "[2,2]")
+    @Params(pc = {@Convert(value = "[1,2,2,1]", convert = ArrayConvert.class),
+            @Convert(value = "[2,2]", convert = ArrayConvert.class)})
+    @Answer(c = @Convert("[2,2]"))
     public int[] intersect(int[] nums1, int[] nums2) {
         // 1、排序
         Arrays.sort(nums1);
@@ -235,8 +238,8 @@ public class ArrayChapter {
      * 时间复杂度：O(n)
      */
     @Title("加一")
-    @Param({"[9,9]"})
-    @Answer(value = "[1,0,0]")
+    @Params(pc = {@Convert(value = "[9,9]", convert = ArrayConvert.class)})
+    @Answer(c = @Convert(value = "[1,0,0]", convert = ArrayConvert.class))
     public int[] plusOne(int[] digits) {
         // addend(加数) 可以为1~9
         int addend = 1;
@@ -272,8 +275,8 @@ public class ArrayChapter {
      * 时间复杂度：O(n)
      */
     @Title("移动零")
-    @Param({"[0,1,0,3,12]"})
-    @Answer(value = "[1,3,12,0,0]", matchPattern = MatchPattern.PARAM_ONE)
+    @Params(pc = {@Convert(value = "[0,1,0,3,12]", convert = ArrayConvert.class)})
+    @Answer(c = @Convert(value = "[1,3,12,0,0]", convert = ArrayConvert.class), pattern = MatchPattern.PARAM)
     public void moveZeroes(int[] nums) {
         if (nums.length <= 1) {
             return;
@@ -302,8 +305,8 @@ public class ArrayChapter {
      * 时间复杂度：O(nlog n)
      */
     @Title("两数之和")
-    @Param({"[2,7,11,15]", "9"})
-    @Answer(value = "[0,1]")
+    @Params(pc = {@Convert(value = "[2,7,11,15]", convert = ArrayConvert.class), @Convert("9")})
+    @Answer(c = @Convert(value = "[0,1]", convert = ArrayConvert.class))
     public int[] twoSum(int[] nums, int target) {
         Arrays.sort(nums);
 
@@ -329,16 +332,19 @@ public class ArrayChapter {
      * 时间复杂度：O(n^2)
      */
     @Title("有效的数独")
-    @Param(value = {"[['5','3','.','.','7','.','.','.','.']," +
-            "['6','.','.','1','9','5','.','.','.']," +
-            "['.','9','8','.','.','.','.','6','.']," +
-            "['8','.','.','.','6','.','.','.','3']," +
-            "['4','.','.','8','.','3','.','.','1']," +
-            "['7','.','.','.','2','.','.','.','6']," +
-            "['.','6','.','.','.','.','2','8','.']," +
-            "['.','.','.','4','1','9','.','.','5']," +
-            "['.','.','.','.','8','.','.','7','9']]"}, convert = {DoubleCharArrayConvert.class})
-    @Answer(value = "true")
+    @Params(pc = {
+            @Convert(value =
+                    "[['5','3','.','.','7','.','.','.','.']," +
+                            "['6','.','.','1','9','5','.','.','.']," +
+                            "['.','9','8','.','.','.','.','6','.']," +
+                            "['8','.','.','.','6','.','.','.','3']," +
+                            "['4','.','.','8','.','3','.','.','1']," +
+                            "['7','.','.','.','2','.','.','.','6']," +
+                            "['.','6','.','.','.','.','2','8','.']," +
+                            "['.','.','.','4','1','9','.','.','5']," +
+                            "['.','.','.','.','8','.','.','7','9']]", convert = TwoArrayConvert.class, type = char.class)
+    })
+    @Answer(c = @Convert("true"))
     public boolean isValidSudoku(char[][] board) {
         // 1、构建3个位图
         int[] row = new int[board.length];
@@ -383,8 +389,8 @@ public class ArrayChapter {
      * 时间复杂度：O(n)
      */
     @Title("旋转图像")
-    @Param({"[[1,2,3],[4,5,6],[7,8,9]]"})
-    @Answer(value = "[[7,4,1],[8,5,2],[9,6,3]]")
+    @Params(pc = {@Convert(value = "[[1,2,3],[4,5,6],[7,8,9]]", convert = TwoArrayConvert.class)})
+    @Answer(c = @Convert(value = "[[7,4,1],[8,5,2],[9,6,3]]", convert = TwoArrayConvert.class))
     public void rotate(int[][] matrix) {
         // 1、上下交换
         int half = matrix.length / 2;

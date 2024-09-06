@@ -1,4 +1,4 @@
-package org.example.comom.linkednode;
+package org.example.comom.stru;
 
 import java.util.ArrayList;
 import java.util.List;

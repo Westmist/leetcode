@@ -1,11 +1,11 @@
 package org.example.book.easy;
 
-import org.example.basic.Answer;
-import org.example.basic.MatchPattern;
-import org.example.basic.Param;
-import org.example.basic.Title;
-import org.example.basic.convert.CharArrayConvert;
-import org.example.basic.convert.StringArrayConvert;
+import org.example.basic.convert.ano.Answer;
+import org.example.basic.convert.ano.Convert;
+import org.example.basic.convert.ano.Params;
+import org.example.basic.convert.ano.Title;
+import org.example.basic.convert.cons.MatchPattern;
+import org.example.basic.convert.imp.ArrayConvert;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,11 +25,8 @@ public class StringChapter {
      * 时间复杂度：O(n)
      */
     @Title("反转字符串")
-    @Param(value = "['h','e','l','l','o']",
-            convert = CharArrayConvert.class)
-    @Answer(value = "['o','l','l','e','h']",
-            matchPattern = MatchPattern.PARAM_ONE,
-            convert = CharArrayConvert.class)
+    @Params(pc = {@Convert(value = "['h','e','l','l','o']", convert = ArrayConvert.class, type = char.class)})
+    @Answer(c = @Convert(value = "['o','l','l','e','h']", convert = ArrayConvert.class, type = char.class), pattern = MatchPattern.PARAM)
     public void reverseString(char[] s) {
         int left = 0, right = s.length - 1;
         while (left < right) {
@@ -49,8 +46,8 @@ public class StringChapter {
      * 时间复杂度：O(n)
      */
     @Title("整数反转")
-    @Param("-123")
-    @Answer("-321")
+    @Params(pc = {@Convert("-123")})
+    @Answer(c = @Convert("-321"))
     public int reverse(int x) {
         char[] src = String.valueOf(x).toCharArray();
         int left = 0, right = src.length - 1;
@@ -84,8 +81,8 @@ public class StringChapter {
      * 时间复杂度：O(n)
      */
     @Title("字符串中的第一个唯一字符")
-    @Param("loveleetcode")
-    @Answer("2")
+    @Params(pc = {@Convert("loveleetcode")})
+    @Answer(c = @Convert("2"))
     public int firstUniqChar(String s) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < s.length(); i++) {
@@ -119,8 +116,8 @@ public class StringChapter {
      * 时间复杂度：O(n)
      */
     @Title("有效的字母异位词")
-    @Param({"anagram", "nagaram"})
-    @Answer("true")
+    @Params(pc = {@Convert("anagram"), @Convert("nagaram")})
+    @Answer(c = @Convert("true"))
     public boolean isAnagram(String s, String t) {
         if (s.length() != t.length()) {
             return false;
@@ -154,8 +151,8 @@ public class StringChapter {
      * 时间复杂度：O(n)
      */
     @Title("验证回文串")
-    @Param({"A man, a plan, a canal: Panama"})
-    @Answer("true")
+    @Params(pc = {@Convert("A man, a plan, a canal: Panama")})
+    @Answer(c = @Convert("true"))
     public boolean isPalindrome(String s) {
         int left = 0, right = s.length() - 1;
         while (left < right) {
@@ -189,8 +186,8 @@ public class StringChapter {
      * 时间复杂度：O(n)
      */
     @Title("字符串转换整数 (atoi)")
-    @Param({" -042"})
-    @Answer("-42")
+    @Params(pc = {@Convert(" -042")})
+    @Answer(c = @Convert("-42"))
     public int myAtoi(String s) {
         StringBuilder builder = new StringBuilder();
         // 0: 初始阶段，1：已除去空格， 2: 已加完符号， 3：已处理完前置0
@@ -260,8 +257,8 @@ public class StringChapter {
      * 时间复杂度：O(n^2)
      */
     @Title("实现 strStr()")
-    @Param({"leetcode", "leet"})
-    @Answer("0")
+    @Params(pc = {@Convert("leetcode"), @Convert("leet")})
+    @Answer(c = @Convert("0"))
     public int strStr(String haystack, String needle) {
         for (int i = 0; i < haystack.length(); i++) {
             char tar = haystack.charAt(i);
@@ -289,8 +286,8 @@ public class StringChapter {
      * 时间复杂度：O(n^2)
      */
     @Title("外观数列")
-    @Param({"4"})
-    @Answer("1211")
+    @Params(pc = {@Convert("4")})
+    @Answer(c = @Convert("1211"))
     public String countAndSay(int n) {
         String ans = "1";
         for (int i = 1; i < n; i++) {
@@ -328,8 +325,8 @@ public class StringChapter {
      * 时间复杂度：O(n)
      */
     @Title("最长公共前缀")
-    @Param(value = {"['flower','flow','flight']"}, convert = StringArrayConvert.class)
-    @Answer("fl")
+    @Params(pc = {@Convert(value = "['flower','flow','flight']", convert = ArrayConvert.class, type = String.class)})
+    @Answer(c = @Convert("fl"))
     public String longestCommonPrefix(String[] strs) {
         String f = strs[0];
         int minLength = f.length();

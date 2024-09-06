@@ -1,19 +1,16 @@
-package org.example.basic.convert;
+package org.example.basic.convert.imp;
 
-import org.example.basic.ConvertFactory;
-import org.example.comom.linkednode.ListNode;
+import org.example.basic.convert.ConvertFactory;
+import org.example.basic.convert.inf.IConvert;
+import org.example.comom.stru.ListNode;
 
 /**
  * 转链表返回头节点
  */
-public  class ListNodeConvert implements IConvert<ListNode> {
-    @Override
-    public ListNode convert(String src) {
-        return null;
-    }
+public class ListNodeConvert implements IConvert<ListNode<?>> {
 
     @Override
-    public ListNode convert(String src, Class<?> tClazz) {
+    public ListNode<?> convert(String src, Class<?> tClazz) {
         // 去掉字符串的方括号和单引号
         src = src.replace("[", "").replace("]", "").replace("'", "");
 
@@ -27,4 +24,5 @@ public  class ListNodeConvert implements IConvert<ListNode> {
         }
         return ListNode.build(rt);
     }
+
 }
