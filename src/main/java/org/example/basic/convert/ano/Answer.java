@@ -2,6 +2,7 @@ package org.example.basic.convert.ano;
 
 import org.example.basic.convert.cons.MatchPattern;
 import org.example.basic.convert.inf.IConvertSection;
+import org.example.basic.section.SectionFactory;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -18,9 +19,7 @@ public @interface Answer {
     /**
      * 转换切面处理
      */
-    Class<? extends IConvertSection> section() default IConvertSection.class;
-
-    MatchPattern pattern() default MatchPattern.RESULT;
+    Class<? extends IConvertSection> section() default SectionFactory.AnswerSection.class;
 
 }
 

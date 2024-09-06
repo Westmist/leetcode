@@ -1,7 +1,9 @@
 package org.example.basic.convert.inf;
 
+import org.example.basic.convert.entity.MethodParams;
+
 public interface IConvertSection {
 
-    Object paramsAns(Object[] params);
+    MethodParams paramsAns(Object[] params);
 
 }

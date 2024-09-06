@@ -6,6 +6,7 @@ import org.example.basic.convert.ano.Params;
 import org.example.basic.convert.ano.Title;
 import org.example.basic.convert.cons.MatchPattern;
 import org.example.basic.convert.imp.ArrayConvert;
+import org.example.basic.section.SectionFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +28,8 @@ public class StringChapter {
      */
     @Title("反转字符串")
     @Params(pc = {@Convert(value = "['h','e','l','l','o']", convert = ArrayConvert.class, type = char.class)})
-    @Answer(c = @Convert(value = "['o','l','l','e','h']", convert = ArrayConvert.class, type = char.class), pattern = MatchPattern.PARAM)
+    @Answer(c = @Convert(value = "['o','l','l','e','h']", convert = ArrayConvert.class, type = char.class),
+            section = SectionFactory.FristParamSection.class)
     public void reverseString(char[] s) {
         int left = 0, right = s.length - 1;
         while (left < right) {

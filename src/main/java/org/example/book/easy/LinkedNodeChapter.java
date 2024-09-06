@@ -4,8 +4,8 @@ import org.example.basic.convert.ano.Answer;
 import org.example.basic.convert.ano.Convert;
 import org.example.basic.convert.ano.Params;
 import org.example.basic.convert.ano.Title;
-import org.example.basic.convert.cons.MatchPattern;
 import org.example.basic.convert.imp.ListNodeConvert;
+import org.example.basic.section.SectionFactory;
 import org.example.comom.stru.ListNode;
 
 import java.util.ArrayDeque;
@@ -25,11 +25,11 @@ public class LinkedNodeChapter {
      * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnarn7/'>...</a>}
      * 方法：链表节点挪动
      * 时间复杂度：O(n)
-     * TODO 修复隐藏参数答案验证
      */
     @Title("删除链表中的节点")
     @Params(pc = {@Convert(value = "[4,5,1,9]", convert = ListNodeConvert.class)})
-    @Answer(c = @Convert(value = "[4,1,9]", convert = ListNodeConvert.class), pattern = MatchPattern.PARAM)
+    @Answer(c = @Convert(value = "[4,1,9]", convert = ListNodeConvert.class),
+            section = SectionFactory.FristListNodeSection.class)
     public void deleteNode(ListNode node) {
         ListNode cur = node;
         while (cur.next != null) {

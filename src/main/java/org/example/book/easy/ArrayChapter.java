@@ -7,6 +7,7 @@ import org.example.basic.convert.ano.Title;
 import org.example.basic.convert.cons.MatchPattern;
 import org.example.basic.convert.imp.ArrayConvert;
 import org.example.basic.convert.imp.TwoArrayConvert;
+import org.example.basic.section.SectionFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,7 +84,8 @@ public class ArrayChapter {
      */
     @Title("旋转数组")
     @Params(pc = {@Convert(value = "[1,2,3,4,5,6,7]", convert = ArrayConvert.class), @Convert("3")})
-    @Answer(c = @Convert(value = "[5,6,7,1,2,3,4]", convert = ArrayConvert.class), pattern = MatchPattern.PARAM)
+    @Answer(c = @Convert(value = "[5,6,7,1,2,3,4]", convert = ArrayConvert.class),
+            section = SectionFactory.FristParamSection.class)
     public void rotate(int[] nums, int k) {
         // 翻转次数是数组长度的整数倍时，数组保持不变
         k = k % nums.length;
@@ -277,7 +279,8 @@ public class ArrayChapter {
      */
     @Title("移动零")
     @Params(pc = {@Convert(value = "[0,1,0,3,12]", convert = ArrayConvert.class)})
-    @Answer(c = @Convert(value = "[1,3,12,0,0]", convert = ArrayConvert.class), pattern = MatchPattern.PARAM)
+    @Answer(c = @Convert(value = "[1,3,12,0,0]", convert = ArrayConvert.class),
+            section = SectionFactory.FristParamSection.class)
     public void moveZeroes(int[] nums) {
         if (nums.length <= 1) {
             return;
@@ -391,7 +394,8 @@ public class ArrayChapter {
      */
     @Title("旋转图像")
     @Params(pc = {@Convert(value = "[[1,2,3],[4,5,6],[7,8,9]]", convert = TwoArrayConvert.class)})
-    @Answer(c = @Convert(value = "[[7,4,1],[8,5,2],[9,6,3]]", convert = TwoArrayConvert.class), pattern = MatchPattern.PARAM)
+    @Answer(c = @Convert(value = "[[7,4,1],[8,5,2],[9,6,3]]", convert = TwoArrayConvert.class),
+            section = SectionFactory.FristParamSection.class)
     public void rotate(int[][] matrix) {
         // 1、上下交换
         int half = matrix.length / 2;

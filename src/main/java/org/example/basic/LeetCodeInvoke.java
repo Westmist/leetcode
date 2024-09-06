@@ -8,9 +8,10 @@ import org.example.basic.convert.ano.Answer;
 import org.example.basic.convert.ano.Convert;
 import org.example.basic.convert.ano.Params;
 import org.example.basic.convert.ano.Title;
-import org.example.basic.convert.cons.MatchPattern;
+import org.example.basic.convert.entity.MethodParams;
 import org.example.basic.convert.inf.IConvertSection;
 import org.example.basic.convert.inf.IMethodFilter;
+import org.example.basic.section.SectionFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -59,7 +60,11 @@ public class LeetCodeInvoke {
 
     public static void doInvoke(Object instance, Method method) {
         Object[] methodParams = buildParamObj(method);
-        Object commit = buildCommit(instance, method, methodParams);
+        Answer answerAno = method.getAnnotation(Answer.class);
+        Class<? extends IConvertSection> sClazz = answerAno.section();
+        IConvertSection section = SectionFactory.find(sClazz);
+        MethodParams mp = section.paramsAns(methodParams);
+        Object commit = buildCommit(instance, method, mp);
         Object ans = buildAns(method, methodParams);
         match(ans, commit, method);
     }
@@ -78,39 +83,16 @@ public class LeetCodeInvoke {
     /**
      * 构建执行结果
      */
-    private static Object buildCommit(Object instance, Method method, Object[] params) {
-
+    private static Object buildCommit(Object instance, Method method, MethodParams mp) {
         Answer answerAno = method.getAnnotation(Answer.class);
-        MatchPattern pattern = answerAno.pattern();
-
         // 执行结果
         Object invokeR;
         try {
-            invokeR = method.invoke(instance, params);
+            invokeR = method.invoke(instance, mp.invokeParams());
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
-        if (pattern == MatchPattern.RESULT) {
-            return invokeR;
-        }
-
-        // 答案可能是参数
-        Class<? extends IConvertSection> clazz = answerAno.section();
-        if (pattern == MatchPattern.PARAM) {
-            IConvertSection section = null;
-            if (clazz.isInterface()) {
-                section = p -> p[0];
-                return section.paramsAns(params);
-            }
-            try {
-                section = clazz.getDeclaredConstructor().newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            assert section != null;
-            return section.paramsAns(params);
-        }
-        return invokeR;
+        return mp.commit() == null ? invokeR : mp.commit();
     }
 
     /**
