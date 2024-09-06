@@ -16,6 +16,7 @@ import java.util.Map;
  *
  * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2uudv/'>...</a>}
  */
+@Title("初级算法:字符串")
 public class StringChapter {
 
     /**

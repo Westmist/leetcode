@@ -2,6 +2,7 @@ package org.example.basic;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.example.basic.convert.ConvertUtil;
 import org.example.basic.convert.ano.Answer;
 import org.example.basic.convert.ano.Convert;
@@ -18,27 +19,21 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class LeetCodeInvoke {
 
     private static ObjectMapper MAPPER = new ObjectMapper();
 
     public static void invoke(Class<?> aClass) {
-        Set<String> parentMethods = Arrays.stream(aClass.getSuperclass().getMethods())
-                .map(Method::getName)
-                .collect(Collectors.toSet());
+        Set<String> parentMethods = Arrays.stream(aClass.getSuperclass().getMethods()).map(Method::getName).collect(Collectors.toSet());
         invoke(aClass, allMethods -> {
             // 过滤掉父类的方法
-            return Arrays.stream(allMethods)
-                    .filter(method -> !parentMethods.contains(method.getName())
-                            && method.isAnnotationPresent(Answer.class))
-                    .toArray(Method[]::new);
+            return Arrays.stream(allMethods).filter(method -> !parentMethods.contains(method.getName()) && method.isAnnotationPresent(Answer.class)).toArray(Method[]::new);
         });
     }
 
     public static void invoke(Class<?> aClass, String methodName) {
-        invoke(aClass, allMethods -> Arrays.stream(allMethods)
-                .filter(method -> method.getName().equals(methodName))
-                .toArray(Method[]::new));
+        invoke(aClass, allMethods -> Arrays.stream(allMethods).filter(method -> method.getName().equals(methodName)).toArray(Method[]::new));
     }
 
     public static void invoke(Class<?> aClass, IMethodFilter filter) {
@@ -52,6 +47,10 @@ public class LeetCodeInvoke {
         }
 
         Method[] methods = filter.filterMethod(aClass.getMethods());
+
+        Title title = aClass.getAnnotation(Title.class);
+        String name = title == null ? "UNKNOWN" : title.value();
+        log.info("开始测试 --------- {} - {} ---------", name, aClass.getSimpleName());
         for (Method method : methods) {
             doInvoke(instance, method);
         }
@@ -132,12 +131,12 @@ public class LeetCodeInvoke {
 
             Title title = method.getAnnotation(Title.class);
             if (ansStr.equals(resultStr)) {
-                System.out.println(title.value() + " - " + methodName + " : Answer Accept");
+                log.info("{} - {}  : Answer Accept", title.value(), methodName);
                 return true;
             } else {
-                System.out.println("\n--------------------------------\n\t" +
-                        "\n* " + title.value() + " - " + methodName + " : Wrong Accept!" + " *\n\t" +
-                        "\n--------------------------------\n\t");
+                log.error("\n\t--------------------------------------------\n\t" +
+                        "\t{} - {}  : Wrong Accept!\n" +
+                        "\t--------------------------------------------\t", title.value(), methodName);
                 return false;
             }
         } catch (JsonProcessingException e) {

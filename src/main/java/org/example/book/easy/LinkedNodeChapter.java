@@ -1,11 +1,14 @@
 package org.example.book.easy;
 
+import org.example.basic.convert.ano.Title;
+
 /**
  * 力扣书籍 - 初级算法
  * 链表章节
  *
  * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2t7vj/'>...</a>}
  */
+@Title("初级算法:链表")
 public class LinkedNodeChapter {
 //
 //    /**

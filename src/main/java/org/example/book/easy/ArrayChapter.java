@@ -18,6 +18,7 @@ import java.util.List;
  *
  * @link {<a href="https://leetcode.cn/leetbook/read/top-interview-questions-easy/x2i30g/">...</a>}
  */
+@Title("初级算法:数组")
 public class ArrayChapter {
 
     /**
