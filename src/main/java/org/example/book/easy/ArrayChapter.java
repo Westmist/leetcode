@@ -390,7 +390,7 @@ public class ArrayChapter {
      */
     @Title("旋转图像")
     @Params(pc = {@Convert(value = "[[1,2,3],[4,5,6],[7,8,9]]", convert = TwoArrayConvert.class)})
-    @Answer(c = @Convert(value = "[[7,4,1],[8,5,2],[9,6,3]]", convert = TwoArrayConvert.class))
+    @Answer(c = @Convert(value = "[[7,4,1],[8,5,2],[9,6,3]]", convert = TwoArrayConvert.class), pattern = MatchPattern.PARAM)
     public void rotate(int[][] matrix) {
         // 1、上下交换
         int half = matrix.length / 2;

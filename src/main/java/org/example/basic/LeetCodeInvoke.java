@@ -79,6 +79,10 @@ public class LeetCodeInvoke {
      * 构建执行结果
      */
     private static Object buildCommit(Object instance, Method method, Object[] params) {
+
+        Answer answerAno = method.getAnnotation(Answer.class);
+        MatchPattern pattern = answerAno.pattern();
+
         // 执行结果
         Object invokeR;
         try {
@@ -86,15 +90,11 @@ public class LeetCodeInvoke {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
-        return invokeR;
-    }
+        if (pattern == MatchPattern.RESULT) {
+            return invokeR;
+        }
 
-    /**
-     * 构建正确答案
-     */
-    private static Object buildAns(Method method, Object[] params) {
-        Answer answerAno = method.getAnnotation(Answer.class);
-        MatchPattern pattern = answerAno.pattern();
+        // 答案可能是参数
         Class<? extends IConvertSection> clazz = answerAno.section();
         if (pattern == MatchPattern.PARAM) {
             IConvertSection section = null;
@@ -110,7 +110,14 @@ public class LeetCodeInvoke {
             assert section != null;
             return section.paramsAns(params);
         }
+        return invokeR;
+    }
 
+    /**
+     * 构建正确答案
+     */
+    private static Object buildAns(Method method, Object[] params) {
+        Answer answerAno = method.getAnnotation(Answer.class);
         Convert annoC = answerAno.c();
         Class<?> ansType = method.getReturnType();
         return ConvertUtil.parse(ansType, annoC);
