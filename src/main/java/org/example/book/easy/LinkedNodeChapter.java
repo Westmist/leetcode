@@ -214,16 +214,29 @@ public class LinkedNodeChapter {
     /**
      * @param head 链表
      * @link {<a href='https://leetcode.cn/leetbook/read/top-interview-questions-easy/xnwzei/'>...</a>}
-     * 方法：
+     * 方法：快慢指针
      * 时间复杂度：O(n)
      */
-//    @Title("环形链表")
-//    @Convert(value = "[3,2,0,-4]", convert = ListNodeConvert.class, genericType = Integer.class)
-//    @Answer(value = "true")
-//    public boolean hasCycle(ListNode head) {
-//
-//        return true;
-//    }
+    @Title("环形链表")
+    @Params(pc = {@Convert(value = "[3,2,0,-4]", convert = ListNodeConvert.class)}, pos = 2)
+    @Answer(c = @Convert("true"), section = SectionFactory.CycleLinkedNode.class)
+    public boolean hasCycle(ListNode head) {
+        // 快慢指针
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast != null && slow != null) {
+            slow = slow.next;
+            fast = fast.next;
+            if (fast == null) {
+                return false;
+            }
+            fast = fast.next;
+            if (fast == slow) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 }

@@ -60,10 +60,15 @@ public class LeetCodeInvoke {
 
     public static void doInvoke(Object instance, Method method) {
         Object[] methodParams = buildParamObj(method);
+
         Answer answerAno = method.getAnnotation(Answer.class);
         Class<? extends IConvertSection> sClazz = answerAno.section();
         IConvertSection section = SectionFactory.find(sClazz);
-        MethodParams mp = section.paramsAns(methodParams);
+
+        Params paramsAno = method.getAnnotation(Params.class);
+
+        MethodParams mp = section.paramsAns(methodParams, paramsAno.pos());
+
         Object commit = buildCommit(instance, method, mp);
         Object ans = buildAns(method, methodParams);
         match(ans, commit, method);

@@ -43,14 +43,4 @@ public class TwoArrayConvert implements IConvert<Object> {
 
         return matrix;
     }
-
-
-    // 使用反射为二维数组赋值
-    private void assignValueWithReflection(Object array, int row, int col, Object value) {
-        // 获取指定行
-        Object rowArray = Array.get(array, row);
-        // 为该行的指定列赋值
-        Array.set(rowArray, col, value);
-    }
-
 }

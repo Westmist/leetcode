@@ -8,5 +8,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface Params {
+
     Convert[] pc() default {};
+
+    int pos() default 1;
+
 }

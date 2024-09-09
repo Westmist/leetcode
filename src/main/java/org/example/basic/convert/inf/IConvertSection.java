@@ -4,6 +4,6 @@ import org.example.basic.convert.entity.MethodParams;
 
 public interface IConvertSection {
 
-    MethodParams paramsAns(Object[] params);
+    MethodParams paramsAns(Object[] params, int pos);
 
 }
