@@ -64,38 +64,6 @@ public class AStart {
         return false;
     }
 
-    // Jumping function to jump over unnecessary nodes
-    private List<Node> jump(GameMap map, Node current, int dirX, int dirY) {
-        List<Node> neighbors = new ArrayList<>();
-        int x = current.getX() + dirX;
-        int y = current.getY() + dirY;
-
-        // 检查是否越界
-        if (!map.walkable(x, y)) return neighbors;
-
-        Node next = map.buildNode(x, y);
-        if (next != null) {
-            neighbors.add(next);
-            return neighbors;
-        }
-        return neighbors;
-    }
-
-    // Check if a node is a jump point (important point in the path)
-    private boolean isJumpPoint(GameMap map, int x, int y, int dirX, int dirY) {
-        if (dirX == 0 && dirY == 0) {
-            return true;
-        }
-
-        if (dirX != 0 && dirY != 0) {
-            // Diagonal direction
-            return (map.walkable(x - dirX, y) || map.walkable(x, y - dirY));
-        } else {
-            // Horizontal or vertical
-            return (map.walkable(x + dirX, y) || map.walkable(x, y + dirY));
-        }
-    }
-
     // Heuristic function (Manhattan Distance)
     private int heuristic(Node a, Node b) {
         return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
