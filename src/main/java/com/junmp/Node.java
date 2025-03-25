@@ -4,14 +4,18 @@ import lombok.Data;
 
 @Data
 public class Node {
+
+    @Deprecated
     private int x, y; // 坐标
+
+    private GameMap.Block block;
+
     private int g;  // 起点到当前节点的代价
     private int h;  // 当前节点到终点的预估代价
     Node parent;   //
 
-    public Node(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Node(GameMap.Block block) {
+        this.block = block;
         this.g = Integer.MAX_VALUE;
         this.h = 0;
         this.parent = null;
@@ -23,7 +27,7 @@ public class Node {
     }
 
     public boolean eq(Node goal) {
-        return x == goal.x && y == goal.y;
+        return this.block == goal.getBlock();
     }
 
     public boolean eq(int x, int y) {

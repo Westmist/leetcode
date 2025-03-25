@@ -2,6 +2,19 @@ package com.junmp;
 
 import java.util.*;
 
+
+/**
+ * TODO List
+ * <p>
+ * 常用算法入门
+ * <p>
+ * 1、寻路算法
+ * 2、视野算法
+ * 3、跳表排序算法
+ * 4、令牌桶限流算法
+ * 5、贪心背包算法
+ * 6、缓存淘汰
+ */
 public class AStart {
     // 方向常量，用于找邻接的节点 8个方向：右、左、下、上、右下、左下、右上、左上
     private static final int[] dx = {1, -1, 0, 0, 1, -1, 1, -1}; // 8 directions
@@ -38,26 +51,29 @@ public class AStart {
 
             // 2、邻接节点
             for (int i = 0; i < 8; i++) {
-                int aX = dx[i] + current.getX();
-                int aY = dy[i] + current.getY();
-                if (containsCloseList(aX, aY)) {
+                GameMap.Block aroundBlock = map.findAroundBlock(current.getBlock(), dx[i], dy[i]);
+                if (aroundBlock == null || !aroundBlock.walkable()) {
                     continue;
                 }
-                Node around = map.buildNode(aX, aY);
-                if (around == null) {
+                if (contains(closedList, aroundBlock)) {
                     continue;
                 }
-                around.cost(current, goal);
-                openList.add(around);
+                if (!contains(openList, aroundBlock)) {
+                    Node around = new Node(aroundBlock);
+                    around.cost(current, goal);
+                    openList.add(around);
+                } else {
+                    // 在开放列表者更新 cost (移除后新加)
+
+                }
             }
         }
         return null;
     }
 
-
-    private boolean containsCloseList(int x, int y) {
-        for (Node node : closedList) {
-            if (node.eq(x, y)) {
+    private boolean contains(Collection<Node> collection, GameMap.Block block) {
+        for (Node node : collection) {
+            if (block == node.getBlock()) {
                 return true;
             }
         }

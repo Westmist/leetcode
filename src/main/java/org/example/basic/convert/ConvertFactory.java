@@ -1,10 +1,10 @@
 package org.example.basic.convert;
 
-import javassist.Modifier;
 import org.example.basic.convert.inf.IConvert;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
